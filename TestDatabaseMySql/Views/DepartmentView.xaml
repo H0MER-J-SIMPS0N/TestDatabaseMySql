@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="TestDatabaseMySql.Views.DepartmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:TestDatabaseMySql.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid d:DataContext="{d:DesignInstance {x:Type vm:DepartmentViewModel}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBox Text="{Binding TextToFind, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Row="0" HorizontalAlignment="Stretch"/>
+        <ListBox ItemsSource="{Binding FoundItems}" SelectionMode="Single" SelectedItem="{Binding SelectedFoundItem}" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Row="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Название" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="0"/>
+            <TextBox HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0" >
+                <TextBox.Text>
+                    <Binding Path="SelectedFoundItem.Title" ValidatesOnExceptions="True" NotifyOnValidationError="True" UpdateSourceTrigger="PropertyChanged" >
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="Руководитель" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="1" />
+            <ComboBox ItemsSource="{Binding AllEmployees}" SelectedItem="{Binding SelectedFoundItem.Manager}" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Command="{Binding UpdateCommand}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" >
+                <TextBlock Text="Сохранить изменения" TextAlignment="Center" />
+            </Button>
+            <Button Command="{Binding AddCommand}" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" >
+                <TextBlock Text="Добавить запись" TextAlignment="Center" />
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>
